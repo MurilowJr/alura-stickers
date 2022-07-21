@@ -23,7 +23,7 @@ public class App {
         List<Map<String, String>> listaDeFilmes = parser.parse(body);
         for (Map<String, String> filme: listaDeFilmes) {
             System.out.println(filme.get("title"));
-            System.out.println(filme.get("https://image.tmdb.org/t/p/w500"+filme.get("backdrop_path")));
+            System.out.println("https://image.tmdb.org/t/p/w500"+filme.get("backdrop_path"));
             System.out.println(filme.get("vote_average"));
         }
         // exibir e manipular os dados
