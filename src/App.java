@@ -1,4 +1,6 @@
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -11,7 +13,7 @@ public class App {
         
         // fazer uma conexão HTTP e buscar os top 250 filmes
 
-        String url = "https://api.themoviedb.org/3/trending/movie/week?api_key=f2a2f0562e88be0fbcc54048c3ef7248";
+        String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java/api/MostPopularMovies.json";
         URI endereco = URI.create(url);
         var client = HttpClient.newHttpClient(); 
         var request = HttpRequest.newBuilder(endereco).GET().build();
@@ -21,11 +23,21 @@ public class App {
         // extrair só os dados que interessam (titulo, poster, classificação)
         var parser = new JsonParser();
         List<Map<String, String>> listaDeFilmes = parser.parse(body);
+        
+        var geradora = new GeradoraDeFigurinhas();
         for (Map<String, String> filme: listaDeFilmes) {
-            System.out.println(filme.get("title"));
-            System.out.println("https://image.tmdb.org/t/p/w500"+filme.get("backdrop_path"));
-            System.out.println(filme.get("vote_average"));
+            
+            String urlImagem = filme.get("image");
+            String titulo = filme.get("title");
+
+            InputStream inputStream = new URL(urlImagem).openStream();
+            String nomeArquivo = titulo.replace(":", "-")  + ".png";
+
+
+            geradora.cria(inputStream, nomeArquivo);
+
+            System.out.println(titulo);
+            System.out.println();
         }
-        // exibir e manipular os dados
     }
 }
